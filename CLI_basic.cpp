@@ -29,5 +29,8 @@ int main() {
     string command = rawCommand.substr(0, rawCommand.find_first_of(' '));
     commandsMap["test"] = &test1;
     char arr[] = {'a', 'b'};
-    commandsMap[command](arr, &main);
+    if (commandsMap.count(command) > 0) {
+        commandsMap[command](arr, &main);
+    }
+    return main();
 }
