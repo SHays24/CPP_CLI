@@ -5,39 +5,45 @@
 using namespace std;
 typedef bool (*ScriptFunction)(string, int (*)());
 
-
 class command_processor {
     public:
         void addCmd(string name, ScriptFunction function, int argNum) {
             this->commandsMap[name] = *function;
             this->argsMap[name] = argNum;
         }
+
         ScriptFunction getCommandMap(string name) {
             return this->commandsMap[name];
         }
+
         int getArgsMap(string name) {
             return this->argsMap[name];
         }
+
         bool checkCommandExists(string name) {
             return (this->commandsMap.count(name) > 0);
+        }
+
+        auto parseArgs(string rawArgs, int argNum) {
+            vector<string>args = {"a", "b"};
+            for (int i = 0; i < argNum; i++) {
+                args[i] = rawArgs.at(rawArgs.find_first_of(' ', i)+1);
+                //args[i] = "a";
+            }
+            return args;
         }
     private:
         unordered_map<string, ScriptFunction> commandsMap;
         unordered_map<string, int> argsMap;
 };
 
+command_processor commProcess;
+
 int main();
 
 bool test1(string args, int (*callFunc)()) {
-    char argsArr[2];
-    //cin >> args[0];
-    //cin >> args[1];
     const int argsNum = 2;
-    //int iterator = 0;
-    char arr[argsNum];
-    //int argCnt = 0;
-    argsArr[0] = args.at(args.find_first_of(' ')+1);
-    argsArr[1] = args.at(args.find_first_of(' ', 1)+1);
+    vector<string> argsArr = commProcess.parseArgs(args, argsNum);
     cout << "test2\n";
     cout << argsArr[0];
     cout << argsArr[1] << "\n";
@@ -45,7 +51,6 @@ bool test1(string args, int (*callFunc)()) {
 }
 
 int main() {
-    command_processor commProcess;
     cout << "> ";
     string rawCommand;
     getline(cin, rawCommand);
