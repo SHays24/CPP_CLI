@@ -45,7 +45,7 @@ bool test1(string args, int (*callFunc)()) {
 
 int main() {
     command_processor commProcess;
-    cout << "> ";
+    cout << "\n> ";
     string rawCommand;
     getline(cin, rawCommand);
     if (rawCommand.length() <= 1) {
@@ -62,5 +62,4 @@ int main() {
     if (commProcess.checkCommandExists(command)) {
         commProcess.getCommandMap(command)(args, &main);
     }
-    //return main();
 }
