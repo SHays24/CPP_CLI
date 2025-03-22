@@ -5,7 +5,8 @@
 using namespace std;
 typedef bool (*ScriptFunction)(string, int (*)());
 
-class command_processor{
+
+class command_processor {
     public:
         void addCmd(string name, ScriptFunction function, int argNum) {
             this->commandsMap[name] = *function;
@@ -45,7 +46,7 @@ bool test1(string args, int (*callFunc)()) {
 
 int main() {
     command_processor commProcess;
-    cout << "\n> ";
+    cout << "> ";
     string rawCommand;
     getline(cin, rawCommand);
     if (rawCommand.length() <= 1) {
