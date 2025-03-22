@@ -2,11 +2,31 @@
 #include <string>
 #include <unordered_map>
 #include <cstddef>
-int main();
 using namespace std;
 typedef bool (*ScriptFunction)(string, int (*)());
-unordered_map<string, ScriptFunction> commandsMap;
-unordered_map<string, int> argsMap;
+
+class command_processor{
+    public:
+        void addCmd(string name, ScriptFunction function, int argNum) {
+            this->commandsMap[name] = *function;
+            this->argsMap[name] = argNum;
+        }
+        ScriptFunction getCommandMap(string name) {
+            return this->commandsMap[name];
+        }
+        int getArgsMap(string name) {
+            return this->argsMap[name];
+        }
+        bool checkCommandExists(string name) {
+            return (this->commandsMap.count(name) > 0);
+        }
+    private:
+        unordered_map<string, ScriptFunction> commandsMap;
+        unordered_map<string, int> argsMap;
+};
+
+int main();
+
 bool test1(string args, int (*callFunc)()) {
     char argsArr[2];
     //cin >> args[0];
@@ -24,23 +44,23 @@ bool test1(string args, int (*callFunc)()) {
 }
 
 int main() {
+    command_processor commProcess;
     cout << "> ";
     string rawCommand;
     getline(cin, rawCommand);
     if (rawCommand.length() <= 1) {
         return main();
     }
-    commandsMap["test"] = &test1;
-    argsMap["test"] = 2;
+    commProcess.addCmd("test", &test1, 2);
     string command = rawCommand.substr(0, rawCommand.find_first_of(' '));
     string args = "";
-    if (rawCommand.find_first_of(' ') <= rawCommand.length() && rawCommand.length() - command.length() > argsMap[command]*2) {
+    if (rawCommand.find_first_of(' ') <= rawCommand.length() && (rawCommand.length() - command.length()) > commProcess.getArgsMap(command)) {
         args = rawCommand.substr(rawCommand.find_first_of(' '));
     } else {
         return main();
     }
-    if (commandsMap.count(command) > 0) {
-        commandsMap[command](args, &main);
+    if (commProcess.checkCommandExists(command)) {
+        commProcess.getCommandMap(command)(args, &main);
     }
     //return main();
 }
