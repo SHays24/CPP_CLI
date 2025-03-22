@@ -34,7 +34,7 @@ int main() {
     argsMap["test"] = 2;
     string command = rawCommand.substr(0, rawCommand.find_first_of(' '));
     string args = "";
-    if (rawCommand.find_first_of(' ') <= rawCommand.length() && rawCommand.length() - command.length() > argsMap[command]) {
+    if (rawCommand.find_first_of(' ') <= rawCommand.length() && rawCommand.length() - command.length() > argsMap[command]*2) {
         args = rawCommand.substr(rawCommand.find_first_of(' '));
     } else {
         return main();
